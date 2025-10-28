@@ -5,10 +5,9 @@ const helmet = require('helmet');
 
 // Importar rotas
 const authRoutes = require('./routes/authRoutes');
-const productRoutes = require('./routes/productRoutes');
-const clientRoutes = require('./routes/clientRoutes');
-const orderRoutes = require('./routes/orderRoutes');
-const reportRoutes = require('./routes/reportRoutes');
+const disciplinaRoutes = require('./routes/disciplinaRoutes');
+const salaRoutes = require('./routes/salaRoutes');
+const turmaRoutes = require('./routes/turmaRoutes');
 
 // Importar middlewares
 const errorHandler = require('./middlewares/errorHandler');
@@ -30,7 +29,7 @@ app.use(requestLogger);
 app.get('/health', (req, res) => {
   res.status(200).json({
     status: 'success',
-    message: 'API ERP funcionando corretamente!',
+    message: 'Sistema de Gestão Acadêmica funcionando corretamente!',
     timestamp: new Date().toISOString(),
     environment: process.env.NODE_ENV || 'development'
   });
@@ -38,10 +37,9 @@ app.get('/health', (req, res) => {
 
 // Rotas da API
 app.use('/api/auth', authRoutes);
-app.use('/api/products', productRoutes);
-app.use('/api/clients', clientRoutes);
-app.use('/api/orders', orderRoutes);
-app.use('/api/reports', reportRoutes);
+app.use('/api/disciplinas', disciplinaRoutes);
+app.use('/api/salas', salaRoutes);
+app.use('/api/turmas', turmaRoutes);
 
 // Rota para endpoints não encontrados
 app.use('*', (req, res) => {
@@ -52,14 +50,16 @@ app.use('*', (req, res) => {
       'GET /health',
       'POST /api/auth/register',
       'POST /api/auth/login',
-      'GET /api/products',
-      'POST /api/products',
-      'GET /api/clients',
-      'POST /api/clients',
-      'GET /api/orders',
-      'POST /api/orders',
-      'GET /api/reports/dashboard',
-      'GET /api/reports/sales'
+      'GET /api/auth/profile',
+      'GET /api/disciplinas',
+      'POST /api/disciplinas',
+      'GET /api/disciplinas/cursos',
+      'GET /api/salas',
+      'POST /api/salas',
+      'GET /api/salas/:id/disponibilidade',
+      'GET /api/turmas',
+      'POST /api/turmas',
+      'GET /api/turmas/relatorio'
     ]
   });
 });
@@ -70,10 +70,15 @@ app.use(errorHandler);
 // Iniciar servidor apenas se não for um ambiente de teste
 if (process.env.NODE_ENV !== 'test') {
   app.listen(PORT, () => {
-    console.log(`🚀 Servidor rodando na porta ${PORT}`);
+    console.log(`🚀 Sistema de Gestão Acadêmica rodando na porta ${PORT}`);
     console.log(`🌍 Ambiente: ${process.env.NODE_ENV || 'development'}`);
     console.log(`📊 Health check: http://localhost:${PORT}/health`);
     console.log(`📚 API Base URL: http://localhost:${PORT}/api`);
+    console.log(`🎓 Endpoints disponíveis:`);
+    console.log(`   - Autenticação: /api/auth`);
+    console.log(`   - Disciplinas: /api/disciplinas`);
+    console.log(`   - Salas: /api/salas`);
+    console.log(`   - Turmas: /api/turmas`);
   });
 }
 

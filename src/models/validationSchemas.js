@@ -3,9 +3,9 @@ const Joi = require('joi');
 // Schema para validação de usuário
 const userSchema = Joi.object({
   name: Joi.string().min(2).max(100).required().messages({
-    'string.min': 'Nome deve ter pelo menos 2 caracteres',
-    'string.max': 'Nome deve ter no máximo 100 caracteres',
-    'any.required': 'Nome é obrigatório'
+    'string.min': 'Nome completo deve ter pelo menos 2 caracteres',
+    'string.max': 'Nome completo deve ter no máximo 100 caracteres',
+    'any.required': 'Nome completo é obrigatório'
   }),
   email: Joi.string().email().required().messages({
     'string.email': 'Email deve ser válido',
@@ -15,7 +15,7 @@ const userSchema = Joi.object({
     'string.min': 'Senha deve ter pelo menos 6 caracteres',
     'any.required': 'Senha é obrigatória'
   }),
-  role: Joi.string().valid('admin', 'user').default('user')
+  role: Joi.string().valid('admin', 'professor', 'coordenador').default('professor')
 });
 
 // Schema para login
@@ -29,97 +29,104 @@ const loginSchema = Joi.object({
   })
 });
 
-// Schema para produto
-const productSchema = Joi.object({
-  name: Joi.string().min(2).max(100).required().messages({
-    'string.min': 'Nome do produto deve ter pelo menos 2 caracteres',
-    'string.max': 'Nome do produto deve ter no máximo 100 caracteres',
-    'any.required': 'Nome do produto é obrigatório'
+// Schema para disciplina
+const disciplinaSchema = Joi.object({
+  nome: Joi.string().min(2).max(100).required().messages({
+    'string.min': 'Nome da disciplina deve ter pelo menos 2 caracteres',
+    'string.max': 'Nome da disciplina deve ter no máximo 100 caracteres',
+    'any.required': 'Nome da disciplina é obrigatório'
   }),
-  description: Joi.string().max(500).required().messages({
+  curso: Joi.string().min(2).max(100).required().messages({
+    'string.min': 'Nome do curso deve ter pelo menos 2 caracteres',
+    'string.max': 'Nome do curso deve ter no máximo 100 caracteres',
+    'any.required': 'Nome do curso é obrigatório'
+  }),
+  descricao: Joi.string().max(500).required().messages({
     'string.max': 'Descrição deve ter no máximo 500 caracteres',
     'any.required': 'Descrição é obrigatória'
   }),
-  price: Joi.number().positive().required().messages({
-    'number.positive': 'Preço deve ser um valor positivo',
-    'any.required': 'Preço é obrigatório'
+  cargaHoraria: Joi.number().integer().positive().required().messages({
+    'number.integer': 'Carga horária deve ser um número inteiro',
+    'number.positive': 'Carga horária deve ser um valor positivo',
+    'any.required': 'Carga horária é obrigatória'
   }),
-  category: Joi.string().required().messages({
-    'any.required': 'Categoria é obrigatória'
+  semestre: Joi.string().pattern(/^\d{4}\/[12]$/).required().messages({
+    'string.pattern.base': 'Semestre deve estar no formato YYYY/N (ex: 2025/2)',
+    'any.required': 'Semestre é obrigatório'
   }),
-  stock: Joi.number().integer().min(0).required().messages({
-    'number.integer': 'Estoque deve ser um número inteiro',
-    'number.min': 'Estoque não pode ser negativo',
-    'any.required': 'Estoque é obrigatório'
-  }),
-  code: Joi.string().required().messages({
-    'any.required': 'Código do produto é obrigatório'
-  }),
-  active: Joi.boolean().default(true)
+  ativa: Joi.boolean().default(true)
 });
 
-// Schema para cliente
-const clientSchema = Joi.object({
-  name: Joi.string().min(2).max(100).required().messages({
-    'string.min': 'Nome deve ter pelo menos 2 caracteres',
-    'string.max': 'Nome deve ter no máximo 100 caracteres',
-    'any.required': 'Nome é obrigatório'
+// Schema para sala
+const salaSchema = Joi.object({
+  numero: Joi.string().min(2).max(20).required().messages({
+    'string.min': 'Número da sala deve ter pelo menos 2 caracteres',
+    'string.max': 'Número da sala deve ter no máximo 20 caracteres',
+    'any.required': 'Número da sala é obrigatório'
   }),
-  email: Joi.string().email().required().messages({
-    'string.email': 'Email deve ser válido',
-    'any.required': 'Email é obrigatório'
+  descricao: Joi.string().max(200).required().messages({
+    'string.max': 'Descrição deve ter no máximo 200 caracteres',
+    'any.required': 'Descrição é obrigatória'
   }),
-  phone: Joi.string().required().messages({
-    'any.required': 'Telefone é obrigatório'
+  lotacao: Joi.number().integer().positive().required().messages({
+    'number.integer': 'Lotação deve ser um número inteiro',
+    'number.positive': 'Lotação deve ser um valor positivo',
+    'any.required': 'Lotação é obrigatória'
   }),
-  document: Joi.string().required().messages({
-    'any.required': 'Documento é obrigatório'
-  }),
-  address: Joi.object({
-    street: Joi.string().required().messages({
-      'any.required': 'Endereço é obrigatório'
-    }),
-    city: Joi.string().required().messages({
-      'any.required': 'Cidade é obrigatória'
-    }),
-    state: Joi.string().length(2).required().messages({
-      'string.length': 'Estado deve ter 2 caracteres',
-      'any.required': 'Estado é obrigatório'
-    }),
-    zipCode: Joi.string().required().messages({
-      'any.required': 'CEP é obrigatório'
-    })
-  }).required(),
-  active: Joi.boolean().default(true)
+  ativa: Joi.boolean().default(true)
 });
 
-// Schema para pedido
-const orderSchema = Joi.object({
-  clientId: Joi.string().required().messages({
-    'any.required': 'ID do cliente é obrigatório'
+// Schema para turma (versão básica)
+const turmaBasicaSchema = Joi.object({
+  semestreLetivo: Joi.string().pattern(/^\d{4}\/[12]$/).required().messages({
+    'string.pattern.base': 'Semestre letivo deve estar no formato YYYY/N (ex: 2025/2)',
+    'any.required': 'Semestre letivo é obrigatório'
   }),
-  items: Joi.array().items(
-    Joi.object({
-      productId: Joi.string().required().messages({
-        'any.required': 'ID do produto é obrigatório'
-      }),
-      quantity: Joi.number().integer().positive().required().messages({
-        'number.integer': 'Quantidade deve ser um número inteiro',
-        'number.positive': 'Quantidade deve ser positiva',
-        'any.required': 'Quantidade é obrigatória'
-      })
-    })
-  ).min(1).required().messages({
-    'array.min': 'Pedido deve ter pelo menos 1 item',
-    'any.required': 'Itens do pedido são obrigatórios'
+  disciplinaId: Joi.string().required().messages({
+    'any.required': 'ID da disciplina é obrigatório'
   }),
-  notes: Joi.string().max(500).allow('').optional()
+  professor: Joi.string().min(2).max(100).required().messages({
+    'string.min': 'Nome do professor deve ter pelo menos 2 caracteres',
+    'string.max': 'Nome do professor deve ter no máximo 100 caracteres',
+    'any.required': 'Nome do professor é obrigatório'
+  })
+});
+
+// Schema para turma (versão melhorada)
+const turmaSchema = Joi.object({
+  semestreLetivo: Joi.string().pattern(/^\d{4}\/[12]$/).required().messages({
+    'string.pattern.base': 'Semestre letivo deve estar no formato YYYY/N (ex: 2025/2)',
+    'any.required': 'Semestre letivo é obrigatório'
+  }),
+  disciplinaId: Joi.string().required().messages({
+    'any.required': 'ID da disciplina é obrigatório'
+  }),
+  professor: Joi.string().min(2).max(100).required().messages({
+    'string.min': 'Nome do professor deve ter pelo menos 2 caracteres',
+    'string.max': 'Nome do professor deve ter no máximo 100 caracteres',
+    'any.required': 'Nome do professor é obrigatório'
+  }),
+  salaId: Joi.string().required().messages({
+    'any.required': 'ID da sala é obrigatório'
+  }),
+  diaSemana: Joi.string().valid(
+    'segunda-feira', 'terça-feira', 'quarta-feira', 
+    'quinta-feira', 'sexta-feira', 'sábado'
+  ).required().messages({
+    'any.only': 'Dia da semana deve ser: segunda-feira, terça-feira, quarta-feira, quinta-feira, sexta-feira ou sábado',
+    'any.required': 'Dia da semana é obrigatório'
+  }),
+  horario: Joi.string().optional().messages({
+    'string.base': 'Horário deve ser uma string'
+  }),
+  ativa: Joi.boolean().default(true)
 });
 
 module.exports = {
   userSchema,
   loginSchema,
-  productSchema,
-  clientSchema,
-  orderSchema
+  disciplinaSchema,
+  salaSchema,
+  turmaBasicaSchema,
+  turmaSchema
 };

@@ -1,82 +1,119 @@
-// Simulação de banco de dados em memória
+// Simulação de banco de dados em memória - Sistema de Gestão Acadêmica
 const { v4: uuidv4 } = require('uuid');
 
 // Armazenamento em memória
 const users = [
   {
     id: uuidv4(),
-    email: 'admin@erp.com',
+    email: 'admin@sistema.edu.br',
     password: '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-    name: 'Administrador',
+    name: 'Administrador do Sistema',
     role: 'admin',
-    createdAt: new Date(),
-    updatedAt: new Date()
-  }
-];
-
-const products = [
-  {
-    id: uuidv4(),
-    name: 'Notebook Dell Inspiron',
-    description: 'Notebook para uso corporativo',
-    price: 2500.00,
-    category: 'Eletrônicos',
-    stock: 10,
-    code: 'NB001',
-    active: true,
     createdAt: new Date(),
     updatedAt: new Date()
   },
   {
     id: uuidv4(),
-    name: 'Mouse Wireless',
-    description: 'Mouse sem fio ergonômico',
-    price: 85.50,
-    category: 'Acessórios',
-    stock: 25,
-    code: 'MS001',
-    active: true,
+    email: 'professor@sistema.edu.br',
+    password: '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+    name: 'Prof. João Silva',
+    role: 'professor',
     createdAt: new Date(),
     updatedAt: new Date()
   }
 ];
 
-const clients = [
+// Disciplinas: nome, curso, descrição, carga horária, semestre
+const disciplinas = [
   {
     id: uuidv4(),
-    name: 'João Silva',
-    email: 'joao@email.com',
-    phone: '(11) 99999-9999',
-    document: '123.456.789-00',
-    address: {
-      street: 'Rua das Flores, 123',
-      city: 'São Paulo',
-      state: 'SP',
-      zipCode: '01234-567'
-    },
-    active: true,
+    nome: 'Programação Web',
+    curso: 'Análise e Desenvolvimento de Sistemas',
+    descricao: 'Desenvolvimento de aplicações web com tecnologias modernas',
+    cargaHoraria: 80,
+    semestre: '2025/2',
+    ativa: true,
+    createdAt: new Date(),
+    updatedAt: new Date()
+  },
+  {
+    id: uuidv4(),
+    nome: 'Banco de Dados',
+    curso: 'Análise e Desenvolvimento de Sistemas',
+    descricao: 'Modelagem e implementação de sistemas de banco de dados',
+    cargaHoraria: 60,
+    semestre: '2025/2',
+    ativa: true,
+    createdAt: new Date(),
+    updatedAt: new Date()
+  },
+  {
+    id: uuidv4(),
+    nome: 'Estruturas de Dados',
+    curso: 'Ciência da Computação',
+    descricao: 'Estudo de algoritmos e estruturas de dados fundamentais',
+    cargaHoraria: 80,
+    semestre: '2025/2',
+    ativa: true,
     createdAt: new Date(),
     updatedAt: new Date()
   }
 ];
 
-const orders = [
+// Salas: número, descrição, lotação
+const salas = [
   {
     id: uuidv4(),
-    clientId: clients[0].id,
-    items: [
-      {
-        productId: products[0].id,
-        quantity: 1,
-        unitPrice: products[0].price,
-        total: products[0].price
-      }
-    ],
-    totalAmount: products[0].price,
-    status: 'pending', // pending, confirmed, shipped, delivered, cancelled
-    orderDate: new Date(),
-    deliveryDate: null,
-    notes: 'Primeira compra do cliente',
+    numero: 'A101',
+    descricao: 'Laboratório de Informática 1',
+    lotacao: 30,
+    ativa: true,
+    createdAt: new Date(),
+    updatedAt: new Date()
+  },
+  {
+    id: uuidv4(),
+    numero: 'A102',
+    descricao: 'Laboratório de Informática 2',
+    lotacao: 25,
+    ativa: true,
+    createdAt: new Date(),
+    updatedAt: new Date()
+  },
+  {
+    id: uuidv4(),
+    numero: 'B201',
+    descricao: 'Sala de Aula Teórica',
+    lotacao: 40,
+    ativa: true,
+    createdAt: new Date(),
+    updatedAt: new Date()
+  }
+];
+
+// Turmas: semestre letivo, disciplina, professor, sala, dia da semana
+const turmas = [
+  {
+    id: uuidv4(),
+    semestreLetivo: '2025/2',
+    disciplinaId: disciplinas[0].id,
+    professor: 'Prof. João Silva',
+    salaId: salas[0].id,
+    diaSemana: 'segunda-feira',
+    horario: '19:00-22:30',
+    ativa: true,
+    createdAt: new Date(),
+    updatedAt: new Date()
+  },
+  {
+    id: uuidv4(),
+    semestreLetivo: '2025/2',
+    disciplinaId: disciplinas[1].id,
+    professor: 'Prof. Maria Santos',
+    salaId: salas[1].id,
+    diaSemana: 'terça-feira',
+    horario: '19:00-22:30',
+    ativa: true,
     createdAt: new Date(),
     updatedAt: new Date()
   }
@@ -85,7 +122,7 @@ const orders = [
 // Exportar os dados
 module.exports = {
   users,
-  products,
-  clients,
-  orders
+  disciplinas,
+  salas,
+  turmas
 };
