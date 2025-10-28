@@ -24,7 +24,7 @@ const authMiddleware = (req, res, next) => {
     }
 
     // Verificar e decodificar o token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'default_secret_key');
     
     // Buscar o usuário no banco de dados
     const user = users.find(u => u.id === decoded.userId);
