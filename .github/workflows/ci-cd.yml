@@ -67,7 +67,7 @@ jobs:
       if: matrix.node-version == '18.x'
     
     - name: Upload coverage to GitHub
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: matrix.node-version == '18.x'
       with:
         name: coverage-report
@@ -101,7 +101,7 @@ jobs:
         tar -czf academic-system-${{ github.sha }}.tar.gz --exclude=node_modules --exclude=.git .
     
     - name: Upload build artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: academic-system-build
         path: academic-system-${{ github.sha }}.tar.gz
