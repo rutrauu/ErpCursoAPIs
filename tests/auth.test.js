@@ -30,7 +30,7 @@ describe('Auth Endpoints', () => {
         name: 'Test User',
         email: 'test@example.com',
         password: 'password123',
-        role: 'user'
+        role: 'professor'
       };
 
       const response = await request(app)
@@ -38,7 +38,7 @@ describe('Auth Endpoints', () => {
         .send(userData)
         .expect(201);
 
-      expect(response.body.status).toBe('success');
+      expect(response.body.success).toBe(true);
       expect(response.body.message).toBe('Usuário registrado com sucesso');
       expect(response.body.data.user.email).toBe(userData.email);
       expect(response.body.data.user.name).toBe(userData.name);
@@ -49,7 +49,7 @@ describe('Auth Endpoints', () => {
     it('should return error for duplicate email', async () => {
       const userData = {
         name: 'Test User',
-        email: 'admin@erp.com', // Email que já existe
+        email: 'admin@sistema.edu.br', // Email que já existe no dataStore
         password: 'password123'
       };
 
@@ -58,7 +58,7 @@ describe('Auth Endpoints', () => {
         .send(userData)
         .expect(409);
 
-      expect(response.body.status).toBe('error');
+      expect(response.body.success).toBe(false);
       expect(response.body.message).toBe('Email já está em uso');
     });
 
@@ -83,7 +83,7 @@ describe('Auth Endpoints', () => {
   describe('POST /api/auth/login', () => {
     it('should login successfully with valid credentials', async () => {
       const loginData = {
-        email: 'admin@erp.com',
+        email: 'admin@sistema.edu.br',
         password: 'password'
       };
 
@@ -92,7 +92,7 @@ describe('Auth Endpoints', () => {
         .send(loginData)
         .expect(200);
 
-      expect(response.body.status).toBe('success');
+      expect(response.body.success).toBe(true);
       expect(response.body.message).toBe('Login realizado com sucesso');
       expect(response.body.data.user.email).toBe(loginData.email);
       expect(response.body.data.token).toBeDefined();
@@ -103,7 +103,7 @@ describe('Auth Endpoints', () => {
 
     it('should return error for invalid credentials', async () => {
       const loginData = {
-        email: 'admin@erp.com',
+        email: 'admin@sistema.edu.br',
         password: 'wrongpassword'
       };
 
@@ -112,7 +112,7 @@ describe('Auth Endpoints', () => {
         .send(loginData)
         .expect(401);
 
-      expect(response.body.status).toBe('error');
+      expect(response.body.success).toBe(false);
       expect(response.body.message).toBe('Credenciais inválidas');
     });
 
@@ -127,7 +127,7 @@ describe('Auth Endpoints', () => {
         .send(loginData)
         .expect(401);
 
-      expect(response.body.status).toBe('error');
+      expect(response.body.success).toBe(false);
       expect(response.body.message).toBe('Credenciais inválidas');
     });
   });
@@ -138,7 +138,7 @@ describe('Auth Endpoints', () => {
       const loginResponse = await request(app)
         .post('/api/auth/login')
         .send({
-          email: 'admin@erp.com',
+          email: 'admin@sistema.edu.br',
           password: 'password'
         });
       authToken = loginResponse.body.data.token;
@@ -151,7 +151,7 @@ describe('Auth Endpoints', () => {
         .expect(200);
 
       expect(response.body.status).toBe('success');
-      expect(response.body.data.user.email).toBe('admin@erp.com');
+      expect(response.body.data.user.email).toBe('admin@sistema.edu.br');
       expect(response.body.data.user.password).toBeUndefined();
     });
 

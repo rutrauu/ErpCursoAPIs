@@ -1,55 +1,52 @@
-# 🏢 ERP Curso APIs
+# � Sistema de Gestão Acadêmica - APIs RESTful
 
-Sistema ERP (Enterprise Resource Planning) desenvolvido como trabalho acadêmico utilizando APIs RESTful em Node.js com Express.
+Sistema completo de gestão acadêmica desenvolvido como trabalho acadêmico, implementando APIs RESTful robustas em Node.js com Express.
 
 ## 📋 Descrição do Projeto
 
-Este projeto consiste no desenvolvimento de APIs RESTful sem persistência de dados (dados em memória) para um sistema ERP completo. O objetivo é aplicar os conceitos e funcionalidades do REST, implementando um back-end robusto que futuramente pode ser integrado com um front-end.
+Este projeto consiste no desenvolvimento de APIs RESTful sem persistência de dados (dados em memória) para um sistema de gestão acadêmica completo. O objetivo é aplicar os conceitos e funcionalidades do REST, implementando um back-end robusto com todas as regras de negócio necessárias para gerenciar disciplinas, salas, turmas e usuários em uma instituição educacional.
 
 ## 🎯 Funcionalidades Implementadas
 
 ### ✅ Conceito A - Implementação Completa
 
-- **CRUD Simples**: Gerenciamento de Produtos
-- **CRUD com Relacionamento**: Clientes e Pedidos
-- **Funcionalidades de Negócio**: 
-  - Dashboard com estatísticas
-  - Relatórios de vendas
-  - Relatório de estoque
-  - Relatório de clientes
-- **Autenticação**: JWT com middleware de segurança
-- **Arquitetura em Camadas**: Controllers, Services, Middlewares, Models
-- **Tratamento de Erros**: Middleware centralizado
-- **Validação**: Joi para validação de dados
-- **Testes**: Jest e Supertest
-- **Documentação**: README completo
-- **Segurança**: Helmet, CORS, bcrypt
+- **🔐 Autenticação JWT**: Sistema completo com roles (admin, professor, coordenador)
+- **📚 Gestão de Disciplinas**: CRUD completo com validações
+- **🏫 Gestão de Salas**: CRUD com verificação de disponibilidade  
+- **👥 Gestão de Turmas**: CRUD com regras de negócio complexas
+- **🔗 Relacionamentos**: Implementação de relação 1:1 entre disciplina e turma
+- **📊 Relatórios**: Visualização ordenada por dia da semana e salas
+- **🛡️ Segurança**: JWT, bcrypt, Helmet, CORS, validações Joi
+- **🧪 Testes**: Cobertura completa com Jest e Supertest
+- **📖 Documentação**: README profissional com exemplos
+- **🚀 Deploy**: CI/CD com GitHub Actions
+- **🌿 Git/GitHub**: Uso de branches, commits organizados
 
 ## 🛠️ Tecnologias Utilizadas
 
 - **Node.js** - Runtime JavaScript
-- **Express.js** - Framework web
-- **JWT** - Autenticação
-- **Joi** - Validação de dados
+- **Express.js** - Framework web minimalista
+- **JWT** - Autenticação stateless
+- **Joi** - Validação robusta de dados
 - **bcryptjs** - Criptografia de senhas
-- **Helmet** - Segurança HTTP
+- **Helmet** - Segurança HTTP headers
 - **CORS** - Cross-Origin Resource Sharing
-- **Jest** - Testes
+- **Jest** - Framework de testes
 - **Supertest** - Testes de API
 - **uuid** - Geração de IDs únicos
 - **dotenv** - Variáveis de ambiente
+- **ESLint** - Análise estática de código
 
 ## 📁 Estrutura do Projeto
 
 ```
-ErpCursoAPIs/
+Sistema-Gestao-Academica/
 ├── src/
 │   ├── controllers/          # Controladores das rotas
 │   │   ├── authController.js
-│   │   ├── clientController.js
-│   │   ├── orderController.js
-│   │   ├── productController.js
-│   │   └── reportController.js
+│   │   ├── disciplinaController.js
+│   │   ├── salaController.js
+│   │   └── turmaController.js
 │   ├── middlewares/          # Middlewares da aplicação
 │   │   ├── authMiddleware.js
 │   │   ├── errorHandler.js
@@ -60,21 +57,25 @@ ErpCursoAPIs/
 │   │   └── validationSchemas.js
 │   ├── routes/               # Definição das rotas
 │   │   ├── authRoutes.js
-│   │   ├── clientRoutes.js
-│   │   ├── orderRoutes.js
-│   │   ├── productRoutes.js
-│   │   └── reportRoutes.js
-│   ├── services/             # Lógica de negócio
+│   │   ├── disciplinaRoutes.js
+│   │   ├── salaRoutes.js
+│   │   └── turmaRoutes.js
 │   ├── utils/                # Utilitários
 │   │   └── helpers.js
 │   └── server.js             # Arquivo principal
 ├── tests/                    # Testes da aplicação
 │   ├── auth.test.js
-│   ├── products.test.js
+│   ├── disciplinas.test.js
+│   ├── salas.test.js
+│   ├── turmas.test.js
 │   └── setup.js
+├── .github/workflows/        # GitHub Actions CI/CD
+│   └── ci.yml
 ├── .env                      # Variáveis de ambiente
+├── .eslintrc.js             # Configuração ESLint
+├── .gitattributes           # Configuração Git
 ├── .gitignore
-├── jest.config.js            # Configuração do Jest
+├── jest.config.js           # Configuração Jest
 ├── package.json
 └── README.md
 ```
@@ -83,8 +84,9 @@ ErpCursoAPIs/
 
 ### Pré-requisitos
 
-- Node.js (versão 14 ou superior)
+- Node.js (versão 18 ou superior)
 - npm ou yarn
+- Git
 
 ### Instalação
 
@@ -101,8 +103,12 @@ npm install
 
 3. **Configure as variáveis de ambiente**
 ```bash
-cp .env.example .env
-# Edite o arquivo .env com suas configurações
+# O arquivo .env já vem configurado com valores padrão
+# Edite se necessário
+NODE_ENV=development
+PORT=3000
+JWT_SECRET=sistema_gestao_academica_jwt_secret_2025
+JWT_EXPIRES_IN=7d
 ```
 
 4. **Execute a aplicação**
@@ -139,47 +145,39 @@ npm test -- --coverage
 | POST | `/api/auth/register` | Registrar usuário | ❌ |
 | POST | `/api/auth/login` | Login | ❌ |
 | GET | `/api/auth/profile` | Perfil do usuário | ✅ |
-| GET | `/api/auth/users` | Listar usuários (admin) | ✅ Admin |
 
-### 📦 Produtos
-
-| Método | Endpoint | Descrição | Autenticação |
-|--------|----------|-----------|--------------|
-| GET | `/api/products` | Listar produtos | ✅ |
-| GET | `/api/products/:id` | Obter produto por ID | ✅ |
-| POST | `/api/products` | Criar produto | ✅ |
-| PUT | `/api/products/:id` | Atualizar produto | ✅ |
-| DELETE | `/api/products/:id` | Deletar produto | ✅ |
-| GET | `/api/products/categories` | Listar categorias | ✅ |
-
-### 👥 Clientes
+### � Disciplinas
 
 | Método | Endpoint | Descrição | Autenticação |
 |--------|----------|-----------|--------------|
-| GET | `/api/clients` | Listar clientes | ✅ |
-| GET | `/api/clients/:id` | Obter cliente por ID | ✅ |
-| POST | `/api/clients` | Criar cliente | ✅ |
-| PUT | `/api/clients/:id` | Atualizar cliente | ✅ |
-| DELETE | `/api/clients/:id` | Deletar cliente | ✅ |
+| GET | `/api/disciplinas` | Listar disciplinas | ✅ |
+| GET | `/api/disciplinas/:id` | Obter disciplina por ID | ✅ |
+| POST | `/api/disciplinas` | Criar disciplina | ✅ |
+| PUT | `/api/disciplinas/:id` | Atualizar disciplina | ✅ |
+| DELETE | `/api/disciplinas/:id` | Deletar disciplina | ✅ |
+| GET | `/api/disciplinas/cursos` | Listar cursos únicos | ✅ |
 
-### 📋 Pedidos
-
-| Método | Endpoint | Descrição | Autenticação |
-|--------|----------|-----------|--------------|
-| GET | `/api/orders` | Listar pedidos | ✅ |
-| GET | `/api/orders/:id` | Obter pedido por ID | ✅ |
-| POST | `/api/orders` | Criar pedido | ✅ |
-| PATCH | `/api/orders/:id/status` | Atualizar status | ✅ |
-| DELETE | `/api/orders/:id` | Deletar pedido | ✅ |
-
-### 📊 Relatórios
+### 🏫 Salas
 
 | Método | Endpoint | Descrição | Autenticação |
 |--------|----------|-----------|--------------|
-| GET | `/api/reports/dashboard` | Dashboard geral | ✅ |
-| GET | `/api/reports/sales` | Relatório de vendas | ✅ |
-| GET | `/api/reports/inventory` | Relatório de estoque | ✅ |
-| GET | `/api/reports/customers` | Relatório de clientes | ✅ |
+| GET | `/api/salas` | Listar salas | ✅ |
+| GET | `/api/salas/:id` | Obter sala por ID | ✅ |
+| POST | `/api/salas` | Criar sala | ✅ |
+| PUT | `/api/salas/:id` | Atualizar sala | ✅ |
+| DELETE | `/api/salas/:id` | Deletar sala | ✅ |
+| GET | `/api/salas/:id/disponibilidade` | Verificar disponibilidade | ✅ |
+
+### � Turmas
+
+| Método | Endpoint | Descrição | Autenticação |
+|--------|----------|-----------|--------------|
+| GET | `/api/turmas` | Listar turmas | ✅ |
+| GET | `/api/turmas/:id` | Obter turma por ID | ✅ |
+| POST | `/api/turmas` | Criar turma | ✅ |
+| PUT | `/api/turmas/:id` | Atualizar turma | ✅ |
+| DELETE | `/api/turmas/:id` | Deletar turma | ✅ |
+| GET | `/api/turmas/relatorio` | Relatório por dia/sala | ✅ |
 
 ## 🔧 Exemplos de Uso
 

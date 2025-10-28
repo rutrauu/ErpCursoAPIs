@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const disciplinaController = require('../controllers/disciplinaController');
-// const authMiddleware = require('../middlewares/authMiddleware');
+const { authMiddleware } = require('../middlewares/authMiddleware');
 const validate = require('../middlewares/validation');
 const { disciplinaSchema } = require('../models/validationSchemas');
 
 // Aplicar middleware de autenticação em todas as rotas
-// router.use(authMiddleware);
+router.use(authMiddleware);
 
 // GET /api/disciplinas - Listar disciplinas
 router.get('/', disciplinaController.listarDisciplinas);

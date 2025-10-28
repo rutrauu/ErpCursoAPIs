@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const salaController = require('../controllers/salaController');
-// const authMiddleware = require('../middlewares/authMiddleware');
+const { authMiddleware } = require('../middlewares/authMiddleware');
 const validate = require('../middlewares/validation');
 const { salaSchema } = require('../models/validationSchemas');
 
 // Aplicar middleware de autenticação em todas as rotas
-// router.use(authMiddleware);
+router.use(authMiddleware);
 
 // GET /api/salas - Listar salas
 router.get('/', salaController.listarSalas);
