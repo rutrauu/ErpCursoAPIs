@@ -64,10 +64,6 @@ const salaSchema = Joi.object({
     'string.max': 'Número da sala deve ter no máximo 20 caracteres',
     'any.required': 'Número da sala é obrigatório'
   }),
-  nome: Joi.string().min(2).max(100).optional().messages({
-    'string.min': 'Nome da sala deve ter pelo menos 2 caracteres',
-    'string.max': 'Nome da sala deve ter no máximo 100 caracteres'
-  }),
   descricao: Joi.string().max(200).required().messages({
     'string.max': 'Descrição deve ter no máximo 200 caracteres',
     'any.required': 'Descrição é obrigatória'
@@ -77,11 +73,15 @@ const salaSchema = Joi.object({
     'number.positive': 'Lotação deve ser um valor positivo',
     'any.required': 'Lotação é obrigatória'
   }),
+  nome: Joi.string().min(2).max(100).optional().messages({
+    'string.min': 'Nome da sala deve ter pelo menos 2 caracteres',
+    'string.max': 'Nome da sala deve ter no máximo 100 caracteres'
+  }),
   tipo: Joi.string().valid('sala-aula', 'laboratorio', 'auditorio', 'biblioteca').optional().messages({
     'any.only': 'Tipo deve ser: sala-aula, laboratorio, auditorio ou biblioteca'
   }),
   ativa: Joi.boolean().default(true)
-});
+}).options({ allowUnknown: false });
 
 // Schema para turma (versão básica)
 const turmaBasicaSchema = Joi.object({
