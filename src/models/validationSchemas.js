@@ -64,6 +64,10 @@ const salaSchema = Joi.object({
     'string.max': 'Número da sala deve ter no máximo 20 caracteres',
     'any.required': 'Número da sala é obrigatório'
   }),
+  nome: Joi.string().min(2).max(100).optional().messages({
+    'string.min': 'Nome da sala deve ter pelo menos 2 caracteres',
+    'string.max': 'Nome da sala deve ter no máximo 100 caracteres'
+  }),
   descricao: Joi.string().max(200).required().messages({
     'string.max': 'Descrição deve ter no máximo 200 caracteres',
     'any.required': 'Descrição é obrigatória'
@@ -72,6 +76,9 @@ const salaSchema = Joi.object({
     'number.integer': 'Lotação deve ser um número inteiro',
     'number.positive': 'Lotação deve ser um valor positivo',
     'any.required': 'Lotação é obrigatória'
+  }),
+  tipo: Joi.string().valid('sala-aula', 'laboratorio', 'auditorio', 'biblioteca').optional().messages({
+    'any.only': 'Tipo deve ser: sala-aula, laboratorio, auditorio ou biblioteca'
   }),
   ativa: Joi.boolean().default(true)
 });
@@ -116,10 +123,23 @@ const turmaSchema = Joi.object({
     'any.only': 'Dia da semana deve ser: segunda-feira, terça-feira, quarta-feira, quinta-feira, sexta-feira ou sábado',
     'any.required': 'Dia da semana é obrigatório'
   }),
-  horario: Joi.string().optional().messages({
-    'string.base': 'Horário deve ser uma string'
+  // Aceita tanto horário unificado quanto horários separados
+  horario: Joi.string().pattern(/^([01]?[0-9]|2[0-3]):[0-5][0-9]-([01]?[0-9]|2[0-3]):[0-5][0-9]$/).optional().messages({
+    'string.pattern.base': 'Horário deve estar no formato HH:MM-HH:MM (ex: 19:00-22:30)'
+  }),
+  horarioInicio: Joi.string().pattern(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/).optional().messages({
+    'string.pattern.base': 'Horário de início deve estar no formato HH:MM (ex: 19:00)'
+  }),
+  horarioFim: Joi.string().pattern(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/).optional().messages({
+    'string.pattern.base': 'Horário de fim deve estar no formato HH:MM (ex: 22:30)'
+  }),
+  vagas: Joi.number().integer().positive().optional().default(30).messages({
+    'number.integer': 'Número de vagas deve ser um inteiro',
+    'number.positive': 'Número de vagas deve ser positivo'
   }),
   ativa: Joi.boolean().default(true)
+}).or('horario', 'horarioInicio').messages({
+  'object.missing': 'Deve fornecer pelo menos horário ou horário de início'
 });
 
 module.exports = {

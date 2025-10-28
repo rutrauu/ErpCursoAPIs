@@ -24,6 +24,7 @@ describe('Salas Endpoints', () => {
       {
         id: 'test-sala-1',
         numero: 'A101',
+        nome: 'Laboratório de Informática 1',
         descricao: 'Laboratório de Informática 1',
         lotacao: 30,
         ativa: true,

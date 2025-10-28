@@ -381,7 +381,8 @@ describe('Turmas Endpoints', () => {
           disciplinaId: disciplinaId,
           professor: 'Prof. Teste',
           salaId: salaId,
-          diaSemana: 'quinta-feira'
+          diaSemana: 'quinta-feira',
+          horario: '19:00-22:30'
         });
 
       expect(response.status).toBe(404);
