@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 // Script para testar a autenticação
 const axios = require('axios');
 
