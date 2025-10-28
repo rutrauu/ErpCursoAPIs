@@ -7,8 +7,21 @@ describe('Auth Endpoints', () => {
 
   // Limpar dados antes de cada teste
   beforeEach(() => {
-    // Manter apenas o usuário admin padrão
-    users.length = 1;
+    // Reset users array keeping only admin user
+    users.splice(1); // Remove all except first (admin)
+    
+    // Ensure admin user exists
+    if (users.length === 0) {
+      users.push({
+        id: 'admin-id',
+        email: 'admin@erp.com',
+        password: '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+        name: 'Administrador',
+        role: 'admin',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      });
+    }
   });
 
   describe('POST /api/auth/register', () => {

@@ -1,12 +1,24 @@
 const request = require('supertest');
 const app = require('../src/server');
-const { products } = require('../src/models/dataStore');
+const { products, users } = require('../src/models/dataStore');
 
 describe('Product Endpoints', () => {
   let authToken;
 
   beforeAll(async () => {
-    // Fazer login para obter token
+    // Ensure admin user exists for authentication
+    users.splice(0); // Clear all users first
+    users.push({
+      id: 'admin-id',
+      email: 'admin@erp.com',
+      password: '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+      name: 'Administrador',
+      role: 'admin',
+      createdAt: new Date(),
+      updatedAt: new Date()
+    });
+
+    // Get auth token
     const loginResponse = await request(app)
       .post('/api/auth/login')
       .send({
@@ -17,8 +29,8 @@ describe('Product Endpoints', () => {
   });
 
   beforeEach(() => {
-    // Resetar produtos para estado inicial
-    products.length = 0;
+    // Reset products array
+    products.splice(0); // Clear all products
     products.push(
       {
         id: 'test-product-1',
